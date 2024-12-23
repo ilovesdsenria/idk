@@ -18,6 +18,21 @@
             color: #2c3e50;
         }
 
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 5px #ff69b4, 0 0 10px #ff69b4, 0 0 15px #ff69b4; }
+            50% { text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff69b4, 0 0 30px #ff69b4; }
+        }
+
         .card {
             text-align: center;
             padding: 2.5em;
@@ -29,17 +44,29 @@
             backdrop-filter: blur(10px);
             max-width: 80vw;
             border: 2px solid rgba(255,255,255,0.5);
+            animation: float 6s ease-in-out infinite;
+            position: relative;
+        }
+
+        .sparkle {
+            position: absolute;
+            pointer-events: none;
+            font-size: 20px;
+            animation: sparkle 1.5s linear forwards;
         }
 
         .heart {
             font-size: 60px;
             margin-bottom: 20px;
+            animation: glow 2s ease-in-out infinite;
         }
 
         h1 {
             font-size: 2.2em;
             margin-bottom: 30px;
             font-weight: 600;
+            animation: glow 2s ease-in-out infinite;
+            animation-delay: 0.5s;
         }
 
         p {
@@ -101,42 +128,10 @@
                 font-size: 1.8em;
             }
 
-            .nav-button, .music-control {
+            .nav-button {
                 padding: 12px 25px;
                 font-size: 1em;
             }
-        }
-
-        .rainbow-text {
-            animation: rainbow 5s linear infinite;
-        }
-
-        .falling-star {
-            position: fixed;
-            pointer-events: none;
-            font-size: 20px;
-            animation: fallingStar 2s linear forwards;
-        }
-
-        @keyframes fallingStar {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translate(-50%, -30%); }
-            to { opacity: 1; transform: translate(-50%, -50%); }
-        }
-
-        @keyframes fadeOut {
-            from { opacity: 1; transform: translate(-50%, -50%); }
-            to { opacity: 0; transform: translate(-50%, -70%); }
         }
     </style>
 </head>
@@ -145,19 +140,30 @@
         Посмотреть мемы 😊
     </button>
     <div class="card" onclick="createHeart(event)">
-        <div class="heart rainbow-text">❤️</div>
-        <h1 class="rainbow-text">Моё солнышко!</h1>
+        <div class="heart">❤️</div>
+        <h1>Моё солнышко!</h1>
         <p>Пусть каждый день приносит тебе силы и здоровье</p>
         <p>Ты делаешь этот мир ярче своей улыбкой</p>
         <p>Выздоравливай скорее, я всегда рядом ❤️</p>
-        <p class="secret-message">P.S. Нажми на экран для волшебства ✨</p>
-        <button onclick="createMagicEffect(event)" class="magic-button">✨ Тык✨</button>
+    
+        <button onclick="createMagicEffect(event)" class="magic-button">✨ Тык ✨</button>
     </div>
 
     <script>
+        function createSparkles(event) {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.innerHTML = '✨';
+            sparkle.style.left = (event.clientX - 10) + 'px';
+            sparkle.style.top = (event.clientY - 10) + 'px';
+            document.body.appendChild(sparkle);
+            
+            setTimeout(() => sparkle.remove(), 1500);
+        }
+
         function createHeart(event) {
             const heart = document.createElement('div');
-            heart.className = 'falling-heart';
+            heart.className = 'sparkle';
             heart.innerHTML = '❤️';
             heart.style.left = event.clientX + 'px';
             heart.style.top = event.clientY + 'px';
@@ -190,7 +196,17 @@
         function createMagicEffect(event) {
             event.stopPropagation();
             
-            // Показываем случайный комплимент
+            // Создаем эффект искр вокруг кнопки
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => {
+                    const angle = (i / 8) * 360;
+                    const x = event.clientX + 50 * Math.cos(angle * Math.PI / 180);
+                    const y = event.clientY + 50 * Math.sin(angle * Math.PI / 180);
+                    createSparkles({clientX: x, clientY: y});
+                }, i * 100);
+            }
+            
+            // Показываем комплимент
             const randomCompliment = compliments[Math.floor(Math.random() * compliments.length)];
             const complimentDiv = document.createElement('div');
             complimentDiv.style.position = 'fixed';
@@ -206,9 +222,15 @@
             complimentDiv.textContent = randomCompliment;
             
             document.body.appendChild(complimentDiv);
-            
             setTimeout(() => complimentDiv.remove(), 2000);
         }
+
+        // Добавим обработчик для создания искр при движении мыши
+        document.addEventListener('mousemove', (event) => {
+            if (Math.random() < 0.1) { // 10% шанс создания искры
+                createSparkles(event);
+            }
+        });
     </script>
 </body>
-</html> 
+</html>
