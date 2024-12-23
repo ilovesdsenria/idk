@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Выздоравливай скорее! ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #ffd1d1 0%, #ff9ecd 100%);
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+            color: #2c3e50;
+        }
+
+        .card {
+            text-align: center;
+            padding: 2.5em;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            animation: float 3s ease-in-out infinite;
+            z-index: 1;
+            cursor: pointer;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+            max-width: 80vw;
+            border: 2px solid rgba(255,255,255,0.5);
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .heart {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2.2em;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        p {
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin: 15px 0;
+            opacity: 0.9;
+        }
+
+        .magic-button {
+            background: linear-gradient(45deg, #ff69b4, #ff1493);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            color: white;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(255,20,147,0.3);
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .magic-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(255,20,147,0.4);
+        }
+
+        .nav-button {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: linear-gradient(45deg, #4a90e2, #63b3ed);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1em;
+            box-shadow: 0 5px 15px rgba(74,144,226,0.3);
+            transition: all 0.3s;
+            z-index: 100;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(74,144,226,0.4);
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                padding: 2em;
+                margin: 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .nav-button, .music-control {
+                padding: 12px 25px;
+                font-size: 1em;
+            }
+        }
+
+        @keyframes rainbow {
+            0% { color: #ff0000; }
+            20% { color: #ff8000; }
+            40% { color: #ffff00; }
+            60% { color: #00ff00; }
+            80% { color: #00ffff; }
+            100% { color: #ff00ff; }
+        }
+
+        .rainbow-text {
+            animation: rainbow 5s linear infinite;
+        }
+
+        .falling-star {
+            position: fixed;
+            pointer-events: none;
+            font-size: 20px;
+            animation: fallingStar 2s linear forwards;
+        }
+
+        @keyframes fallingStar {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -30%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translate(-50%, -50%); }
+            to { opacity: 0; transform: translate(-50%, -70%); }
+        }
+    </style>
+</head>
+<body>
+    <button class="nav-button" onclick="location.href='memes.html'" style="left: 20px;">
+        Посмотреть мемы 😊
+    </button>
+    <div class="card" onclick="createHeart(event)">
+        <div class="heart rainbow-text">❤️</div>
+        <h1 class="rainbow-text">Моё солнышко!</h1>
+        <p>Пусть каждый день приносит тебе силы и здоровье</p>
+        <p>Ты делаешь этот мир ярче своей улыбкой</p>
+        <p>Выздоравливай скорее, я всегда рядом ❤️</p>
+        <p class="secret-message">P.S. Нажми на экран для волшебства ✨</p>
+        <button onclick="createMagicEffect(event)" class="magic-button">✨ Тык✨</button>
+    </div>
+
+    <script>
+        function createHeart(event) {
+            const heart = document.createElement('div');
+            heart.className = 'falling-heart';
+            heart.innerHTML = '❤️';
+            heart.style.left = event.clientX + 'px';
+            heart.style.top = event.clientY + 'px';
+
+            const animation = heart.animate([
+                { transform: 'translate(0, 0) rotate(0deg)', opacity: 1 },
+                { transform: `translate(${Math.random() * 100 - 50}px, ${window.innerHeight}px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+            ], {
+                duration: 3000,
+                easing: 'ease-out'
+            });
+
+            document.body.appendChild(heart);
+            animation.onfinish = () => heart.remove();
+        }
+
+        // Автоматически создаём падающие сердечки
+        setInterval(() => {
+            const x = Math.random() * window.innerWidth;
+            const event = { clientX: x, clientY: -50 };
+            createHeart(event);
+        }, 1000);
+
+        // Добавляем эффект при наведении на карточку
+        const card = document.querySelector('.card');
+        card.addEventListener('mouseover', () => {
+            createHeart({ clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 });
+        });
+
+        const compliments = [
+            "Du bist wunderschön! ✨",
+            "Du bedeutest mir alles! 💖",
+            "Du bist mein Sonnenschein! ☀️",
+            "Du bist einzigartig! 🌟",
+            "Du machst mich so glücklich! 😊",
+            "Du bist bezaubernd! 💫",
+            "Du bist mein Ein und Alles! 💝",
+            "Du bist unglaublich! 🌸",
+            "Du bist meine Inspiration! 💫",
+            "Du bist perfekt so wie du bist! 🦋"
+        ];
+
+        function createMagicEffect(event) {
+            event.stopPropagation();
+            createHeartExplosion();
+            createSparkles();
+            createConfetti();
+            
+            // Показываем случайный комплимент
+            const randomCompliment = compliments[Math.floor(Math.random() * compliments.length)];
+            const complimentDiv = document.createElement('div');
+            complimentDiv.style.position = 'fixed';
+            complimentDiv.style.top = '70%';
+            complimentDiv.style.left = '50%';
+            complimentDiv.style.transform = 'translate(-50%, -50%)';
+            complimentDiv.style.fontSize = '2em';
+            complimentDiv.style.background = 'rgba(255, 255, 255, 0.95)';
+            complimentDiv.style.padding = '20px';
+            complimentDiv.style.borderRadius = '15px';
+            complimentDiv.style.zIndex = '1000';
+            complimentDiv.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
+            complimentDiv.style.animation = 'fadeIn 0.5s ease-out';
+            complimentDiv.textContent = randomCompliment;
+            
+            document.body.appendChild(complimentDiv);
+            
+            setTimeout(() => {
+                complimentDiv.style.animation = 'fadeOut 0.5s ease-out';
+                setTimeout(() => complimentDiv.remove(), 500);
+            }, 2000);
+        }
+
+        function createSparkles() {
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const sparkle = document.createElement('div');
+                    sparkle.innerHTML = '✨';
+                    sparkle.className = 'sparkle';
+                    sparkle.style.left = Math.random() * window.innerWidth + 'px';
+                    sparkle.style.top = Math.random() * window.innerHeight + 'px';
+                    document.body.appendChild(sparkle);
+                    setTimeout(() => sparkle.remove(), 1000);
+                }, i * 50);
+            }
+        }
+
+        function createHeartExplosion() {
+            for (let i = 0; i < 30; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'falling-heart';
+                heart.innerHTML = '❤️';
+                heart.style.left = window.innerWidth / 2 + 'px';
+                heart.style.top = window.innerHeight / 2 + 'px';
+
+                const angle = (i / 30) * 360;
+                const radius = Math.random() * 200 + 100;
+                const animation = heart.animate([
+                    { transform: 'translate(-50%, -50%) scale(0.5)' },
+                    { 
+                        transform: `translate(
+                            ${radius * Math.cos(angle * Math.PI / 180)}px, 
+                            ${radius * Math.sin(angle * Math.PI / 180)}px
+                        ) scale(0)` 
+                    }
+                ], {
+                    duration: 1500,
+                    easing: 'ease-out'
+                });
+
+                document.body.appendChild(heart);
+                animation.onfinish = () => heart.remove();
+            }
+        }
+
+        function createConfetti() {
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * window.innerWidth + 'px';
+                confetti.style.top = -20 + 'px';
+                confetti.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                
+                document.body.appendChild(confetti);
+
+                const animation = confetti.animate([
+                    { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+                    { transform: `translateY(${window.innerHeight}px) rotate(${720 + Math.random() * 360}deg)`, opacity: 0 }
+                ], {
+                    duration: 3000 + Math.random() * 2000,
+                    easing: 'ease-out'
+                });
+
+                animation.onfinish = () => confetti.remove();
+            }
+        }
+
+        // Добавляем обработку клавиатуры
+        document.addEventListener('keydown', (event) => {
+            if (event.code === 'Space') {
+                createMagicEffect(event);
+            }
+        });
+
+        // Добавляем приветственный эффект
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                createMagicEffect({ stopPropagation: () => {} });
+            }, 1000);
+        });
+
+        function createStars() {
+            setInterval(() => {
+                const star = document.createElement('div');
+                star.className = 'falling-star';
+                star.innerHTML = '⭐';
+                star.style.left = Math.random() * window.innerWidth + 'px';
+                star.style.top = '-20px';
+                document.body.appendChild(star);
+                
+                setTimeout(() => star.remove(), 2000);
+            }, 3000);
+        }
+
+        // Запускаем звёздочки при загрузке
+        window.addEventListener('load', () => {
+            createStars();
+        });
+    </script>
+</body>
+</html> 
